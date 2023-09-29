@@ -23,6 +23,10 @@
         </ul>
     </nav>
     <div class="container mt-5">
+        {% for msg in get_flashed_messages() %}
+        <div class="alert alert-info">{{ msg }}</div>
+        {% endfor %}
+
         {% block content %}
         <!-- put the content here -->
         {% endblock %}

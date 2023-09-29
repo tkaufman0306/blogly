@@ -25,6 +25,20 @@ class User(db.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+class Post(db.Model):
+    __tablename__ = "post"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    title = db.Column(db.Text, nullable=False, unique=False)
+
+    content = db.Column(db.Text, nullable=False, unique=False)
+
+    created_at = db.Column(db.Date, nullable=False)
+
+    user = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+
 def connect_db(app):
     """Connect this database to provided Flask app.
     You should call this in your flask app"""
