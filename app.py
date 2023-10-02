@@ -1,7 +1,6 @@
 """Blogly application."""
 
 from flask import Flask, request, render_template, redirect, flash, session
-
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post
 from sqlalchemy import text
@@ -148,6 +147,7 @@ def posts_show(post_id):
     """Show a page with info on a specific post"""
 
     post = Post.query.get_or_404(post_id)
+    app.logger.info(post)
     return render_template("posts/show.html", post=post)
 
 

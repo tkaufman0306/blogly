@@ -1,5 +1,6 @@
 """Models for Blogly."""
 
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -11,12 +12,11 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-
     first_name = db.Column(db.Text, nullable=False, unique=False)
-
     last_name = db.Column(db.Text, nullable=False, unique=False)
-
     image_url = db.Column(db.Text, nullable=False)
+
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
 
     @property
     def full_name(self):
@@ -26,17 +26,20 @@ class User(db.Model):
 
 
 class Post(db.Model):
-    __tablename__ = "post"
+    __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-
     title = db.Column(db.Text, nullable=False, unique=False)
-
     content = db.Column(db.Text, nullable=False, unique=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
-    created_at = db.Column(db.Date, nullable=False)
 
-    user = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+@property
+def friendly_date(self):
+    """Return friendly-formatted date"""
+
+    return self.created_at.strftime("%a %b %-d %Y, %-I:%M %p")
 
 
 def connect_db(app):
